@@ -149,12 +149,36 @@ body {
     text-transform: uppercase;
     letter-spacing: 1.5px;
     font-weight: 700;
+    line-height: 1.3;
+}
+@media (max-width: 1024px) {
+    .metric h3 {
+        font-size: 0.9em;
+        letter-spacing: 1px;
+    }
 }
 .metric-value {
     font-size: 3.5em;
     font-weight: 900;
     margin-bottom: 10px;
     line-height: 1;
+    word-break: break-all;
+    hyphens: none;
+}
+@media (max-width: 1400px) {
+    .metric-value {
+        font-size: 2.8em;
+    }
+}
+@media (max-width: 1024px) {
+    .metric-value {
+        font-size: 2.3em;
+    }
+}
+@media (max-width: 768px) {
+    .metric-value {
+        font-size: 2.5em;
+    }
 }
 .metric-label {
     font-size: 1em;
@@ -503,7 +527,7 @@ tbody tr:nth-child(even) {
                 <div class="metric blue">
                     <div class="metric-icon">💰</div>
                     <h3 id="m3">Revenue Totale</h3>
-                    <div class="metric-value">€17.893.578</div>
+                    <div class="metric-value">€17.9M</div>
                     <div class="metric-label">7 anni attività</div>
                 </div>
                 <div class="metric pink">
