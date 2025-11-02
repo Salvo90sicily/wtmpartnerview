@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acarent Growth Dashboard 2019-2025 | 93.588 Prenotazioni</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
+}
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+}
+.container {
+    max-width: 1800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    overflow: hidden;
+    width: 100%;
+}
+@media (max-width: 768px) {
+    .container {
+        border-radius: 15px;
+    }
+}
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 60px 50px;
+    text-align: center;
+    position: relative;
+}
+.lang-selector {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+}
+.lang-btn {
+    padding: 12px 24px;
+    margin: 0 5px;
+    border: 2px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.3s;
+}
+.lang-btn.active {
+    background: white;
+    color: #667eea;
+}
+.header h1 {
+    font-size: 5em;
+    margin-bottom: 20px;
+    letter-spacing: 15px;
+    font-weight: 900;
+    text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+}
+.header h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+.header p {
+    font-size: 1.4em;
+}
+.tabs {
+    display: flex;
+    background: #f8f9fa;
+    border-bottom: 4px solid #dee2e6;
+    overflow-x: auto;
+}
+.tab {
+    padding: 25px 35px;
+    font-size: 17px;
+    font-weight: 800;
+    color: #495057;
+    border: none;
+    border-bottom: 5px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+    background: transparent;
+}
+.tab:hover {
+    background: #e9ecef;
+    color: #667eea;
+}
+.tab.active {
+    color: #667eea;
+    background: white;
+    border-bottom-color: #667eea;
+}
+.content {
+    padding: 50px;
+}
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+.metric {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+    transition: all 0.4s;
+}
+.metric:hover {
+    transform: translateY(-10px);
+}
+.metric.green {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+.metric.blue {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+.metric.pink {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+.metric.orange {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+.metric-icon {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+.metric h3 {
+    font-size: 1em;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+}
+.metric-value {
+    font-size: 3.5em;
+    font-weight: 900;
+    margin-bottom: 10px;
+    line-height: 1;
+}
+.metric-label {
+    font-size: 1em;
+    font-weight: 600;
+    opacity: 0.95;
+}
+.chart-box {
+    background: #f8f9fa;
+    padding: 35px;
+    border-radius: 25px;
+    margin-bottom: 35px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+.chart-title {
+    font-size: 1.8em;
+    font-weight: 800;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 5px solid #667eea;
+}
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 35px;
+    margin-bottom: 35px;
+}
+.highlight-box {
+    background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+    border-left: 6px solid #f59e0b;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 35px;
+    box-shadow: 0 10px 25px rgba(245, 158, 11, 0.2);
+}
+.highlight-box h3 {
+    color: #92400e;
+    font-size: 1.6em;
+    margin-bottom: 15px;
+    font-weight: 800;
+}
+.highlight-box p {
+    color: #78350f;
+    font-size: 1.2em;
+    line-height: 1.8;
+    font-weight: 600;
+}
+.covid-box {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border-left: 6px solid #dc2626;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 35px;
+}
+.covid-box h3 {
+    color: #991b1b;
+    font-size: 1.4em;
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+.covid-box p {
+    color: #7f1d1d;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+.broker-box {
+    background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+    border-left: 6px solid #667eea;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 35px;
+}
+.broker-box h3 {
+    color: #3730a3;
+    font-size: 1.6em;
+    margin-bottom: 15px;
+    font-weight: 800;
+}
+.broker-box p {
+    color: #4338ca;
+    font-size: 1.2em;
+    line-height: 1.8;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+.broker-box ul {
+    color: #4338ca;
+    font-size: 1.1em;
+    line-height: 1.8;
+    margin-left: 25px;
+}
+.broker-box li {
+    margin-bottom: 10px;
+}
+.filter-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+.filter-input {
+    flex: 1;
+    padding: 12px 20px;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+.filter-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    margin-bottom: 35px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+thead {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+}
+th {
+    padding: 20px 15px;
+    text-align: left;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    letter-spacing: 1px;
+    cursor: pointer;
+    user-select: none;
+}
+th:hover {
+    background: rgba(255,255,255,0.1);
+}
+th.sortable::after {
+    content: ' ⇅';
+    opacity: 0.5;
+}
+th.sort-asc::after {
+    content: ' ▲';
+    opacity: 1;
+}
+th.sort-desc::after {
+    content: ' ▼';
+    opacity: 1;
+}
+td {
+    padding: 18px 15px;
+    border-bottom: 1px solid #e9ecef;
+}
+tbody tr:hover {
+    background: #f1f3f5;
+}
+tbody tr:nth-child(even) {
+    background: #f9fafb;
+}
+.badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 0.9em;
+}
+.badge.success {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    color: #065f46;
+}
+.badge.danger {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #991b1b;
+}
+@media (max-width: 768px) {
+    .header h1 { 
+        font-size: 2.5em; 
+        letter-spacing: 5px;
+        margin-bottom: 15px;
+    }
+    .header h2 {
+        font-size: 1.3em;
+    }
+    .header p {
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
+    .content { 
+        padding: 30px 15px; 
+    }
+    .chart-grid { 
+        grid-template-columns: 1fr; 
+    }
+    .metrics {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .metric {
+        padding: 25px;
+    }
+    .metric-value {
+        font-size: 2.5em;
+    }
+    .chart-box {
+        padding: 20px;
+    }
+    .chart-title {
+        font-size: 1.3em;
+    }
+    .tab {
+        padding: 15px 20px;
+        font-size: 14px;
+    }
+    .lang-selector {
+        position: static;
+        margin-bottom: 20px;
+    }
+    .highlight-box, .covid-box, .broker-box {
+        padding: 20px;
+    }
+    .highlight-box h3, .covid-box h3, .broker-box h3 {
+        font-size: 1.2em;
+    }
+    .highlight-box p, .covid-box p, .broker-box p {
+        font-size: 1em;
+    }
+    table {
+        font-size: 0.85em;
+    }
+    th, td {
+        padding: 10px 8px;
+    }
+    .filter-box {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* iPad e tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .header h1 { 
+        font-size: 3.5em; 
+        letter-spacing: 10px;
+    }
+    .content { 
+        padding: 40px 30px; 
+    }
+    .chart-grid { 
+        grid-template-columns: 1fr; 
+    }
+    .metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .metric-value {
+        font-size: 3em;
+    }
+    .chart-box {
+        padding: 30px;
+    }
+}
+
+/* Mobile landscape */
+@media (max-width: 768px) and (orientation: landscape) {
+    .header {
+        padding: 40px 30px;
+    }
+    .header h1 {
+        font-size: 2em;
+    }
+}
+.header-logo {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    height: 80px;
+    width: auto;
+    max-width: 200px;
+}
+@media (max-width: 1024px) {
+    .header-logo {
+        height: 60px;
+        top: 20px;
+        left: 20px;
+    }
+}
+@media (max-width: 768px) {
+    .header-logo { 
+        height: 50px;
+        position: relative;
+        top: 0;
+        left: 0;
+        margin: 0 auto 15px;
+        display: block;
+    }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+                <img src="data:image/png;base64,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" alt="Acarent Logo" class="header-logo">
+<div class="lang-selector">
+            <button class="lang-btn active" onclick="setLang('it')">🇮🇹 IT</button>
+            <button class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
+        </div>
+        <h1>ACARENT</h1>
+        <h2 id="subtitle">Dashboard 2019-2025 - Storia Completa</h2>
+        <p id="subtext">93.588 Prenotazioni | 737.097 Giorni | €17.893.578 Revenue</p>
+    </div>
+    
+    <div class="tabs">
+        <button class="tab active" onclick="showTab(0)">📊 <span id="tab0">Panoramica</span></button>
+        <button class="tab" onclick="showTab(1)">📈 <span id="tab1">Crescita Annuale</span></button>
+        <button class="tab" onclick="showTab(2)">😷 <span id="tab2">Impatto COVID</span></button>
+        <button class="tab" onclick="showTab(3)">💰 <span id="tab3">RPD Analisi</span></button>
+        <button class="tab" onclick="showTab(4)">🌍 <span id="tab4">Mercati (18 Paesi)</span></button>
+        <button class="tab" onclick="showTab(5)">🤝 <span id="tab5">Broker & Partner</span></button>
+    </div>
+    
+    <div class="content">
+        <div class="tab-content active" id="content0">
+            <div class="highlight-box">
+                <h3 id="hl1">🚀 Crescita Straordinaria: +938% in 5 Anni!</h3>
+                <p id="hlp1">Dal 2019 al 2025, Acarent ha registrato una crescita esponenziale passando da 2.762 prenotazioni nel 2019 a oltre 28.673 nel 2024 (picco annuale). In totale: <strong>93.588 prenotazioni</strong> generate, più di <strong>737.097 giorni di noleggio</strong> venduti e <strong>€17.893.578 di revenue totale</strong> in 7 anni di attività.</p>
+            </div>
+            
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-icon">🎯</div>
+                    <h3 id="m1">Prenotazioni Totali</h3>
+                    <div class="metric-value">93.588</div>
+                    <div class="metric-label">2019-2025</div>
+                </div>
+                <div class="metric green">
+                    <div class="metric-icon">📅</div>
+                    <h3 id="m2">Giorni Noleggio</h3>
+                    <div class="metric-value">737.097</div>
+                    <div class="metric-label">totali venduti</div>
+                </div>
+                <div class="metric blue">
+                    <div class="metric-icon">💰</div>
+                    <h3 id="m3">Revenue Totale</h3>
+                    <div class="metric-value">€17.893.578</div>
+                    <div class="metric-label">7 anni attività</div>
+                </div>
+                <div class="metric pink">
+                    <div class="metric-icon">📈</div>
+                    <h3 id="m4">Crescita 2019→2024</h3>
+                    <div class="metric-value">+938%</div>
+                    <div class="metric-label">x10 in 5 anni</div>
+                </div>
+                <div class="metric orange">
+                    <div class="metric-icon">🌍</div>
+                    <h3 id="m5">Paesi Attivi</h3>
+                    <div class="metric-value">18</div>
+                    <div class="metric-label">mercati serviti</div>
+                </div>
+            </div>
+            
+            <div class="chart-box">
+                <div class="chart-title" id="c1">Prenotazioni - Crescita 2019-2025</div>
+                <canvas id="chart1"></canvas>
+            </div>
+            
+            <div class="chart-grid">
+                <div class="chart-box">
+                    <div class="chart-title" id="c2">Revenue Anno per Anno (€)</div>
+                    <canvas id="chart2"></canvas>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-title" id="c3">RPD Generale per Anno (€/giorno)</div>
+                    <canvas id="chart3"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="content1">
+            <div class="filter-box">
+                <input type="text" class="filter-input" id="filter1" placeholder="🔍 Cerca anno..." onkeyup="filterTable('table1', 'filter1')">
+            </div>
+            
+            <div class="table-wrapper">
+                <table id="table1">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortTable('table1', 0)">Anno</th>
+                            <th class="sortable" onclick="sortTable('table1', 1)">Prenotazioni</th>
+                            <th class="sortable" onclick="sortTable('table1', 2)">Crescita %</th>
+                            <th class="sortable" onclick="sortTable('table1', 3)">Giorni</th>
+                            <th class="sortable" onclick="sortTable('table1', 4)">Revenue (€)</th>
+                            <th class="sortable" onclick="sortTable('table1', 5)">RPD (€/giorno)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody1"></tbody>
+                </table>
+            </div>
+            
+            <div class="chart-box">
+                <div class="chart-title" id="c4">Prenotazioni - Trend Completo 2019-2025</div>
+                <canvas id="chart4"></canvas>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="content2">
+            <div class="covid-box">
+                <h3 id="cov1">😷 Impatto COVID-19</h3>
+                <p id="covp1">Nel 2020 abbiamo registrato un calo del 21% delle prenotazioni. Ma dal 2021 ripresa esplosiva: <strong>+270% nel 2021</strong>, <strong>+70% nel 2022</strong>, <strong>+30% nel 2023</strong>, <strong>+61% nel 2024</strong>!</p>
+            </div>
+            
+            <div class="chart-grid">
+                <div class="chart-box">
+                    <div class="chart-title" id="c5">Prenotazioni per Anno - Impatto COVID e Ripresa</div>
+                    <canvas id="chart5"></canvas>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-title" id="c6">Confronto Pre/Post COVID (Prenotazioni)</div>
+                    <canvas id="chart6"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="content3">
+            <div class="chart-box">
+                <div class="chart-title" id="c7">RPD (€/giorno) per Nazione e Anno</div>
+                <canvas id="chart7"></canvas>
+            </div>
+            
+            <div class="filter-box">
+                <input type="text" class="filter-input" id="filter2" placeholder="🔍 Cerca anno o paese..." onkeyup="filterTable('table2', 'filter2')">
+            </div>
+            
+            <div class="table-wrapper">
+                <table id="table2">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortTable('table2', 0)">Anno</th>
+                            <th class="sortable" onclick="sortTable('table2', 1)">Paese</th>
+                            <th class="sortable" onclick="sortTable('table2', 2)">Prenotazioni</th>
+                            <th class="sortable" onclick="sortTable('table2', 3)">RPD (€/giorno)</th>
+                            <th class="sortable" onclick="sortTable('table2', 4)">Giorni Totali</th>
+                            <th class="sortable" onclick="sortTable('table2', 5)">Revenue (€)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody2"></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="content4">
+            <div class="highlight-box">
+                <h3>🌍 Presenza Globale: 18 Paesi Serviti!</h3>
+                <p>Acarent opera in <strong>18 mercati internazionali</strong>, con presenza consolidata in Europa, Medio Oriente, USA e Caraibi. Dalla nostra base Italia (58K+ prenotazioni) alla crescita in Grecia (17K+), Albania (6K+), e mercati emergenti come UAE, Georgia, Sri Lanka e Caribbean.</p>
+            </div>
+            
+            <div class="chart-box">
+                <div class="chart-title" id="c8">📊 Distribuzione per Paese - Tutti i 18 Mercati</div>
+                <p style="color: #667eea; font-weight: 700; margin-bottom: 20px;">👇 Scorri per vedere tutti i paesi</p>
+                <canvas id="chart8"></canvas>
+            </div>
+            
+            <div class="filter-box">
+                <input type="text" class="filter-input" id="filter3" placeholder="🔍 Cerca paese..." onkeyup="filterTable('table3', 'filter3')">
+                <span style="font-weight: 800; color: #667eea; white-space: nowrap;">📊 <span id="countryCount">18</span> paesi totali</span>
+            </div>
+            
+            <div class="table-wrapper">
+                <table id="table3">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortTable('table3', 0)">#</th>
+                            <th class="sortable" onclick="sortTable('table3', 1)">Paese</th>
+                            <th class="sortable" onclick="sortTable('table3', 2)">Prenotazioni</th>
+                            <th class="sortable" onclick="sortTable('table3', 3)">% Totale</th>
+                            <th class="sortable" onclick="sortTable('table3', 4)">Revenue (€)</th>
+                            <th class="sortable" onclick="sortTable('table3', 5)">RPD (€/giorno)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody3"></tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 20px; background: #e0e7ff; border-radius: 15px; text-align: center;">
+                <p style="color: #3730a3; font-size: 1.2em; font-weight: 700;">
+                    ✅ Tutti i <span id="totalCountries">18</span> paesi sono visibili nella tabella sopra
+                </p>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="content5">
+            <div class="broker-box">
+                <h3>🤝 Network Broker & Partner</h3>
+                <p><strong>Acarent</strong> collabora con una rete consolidata di broker internazionali e travel agency per generare volume e garantire copertura globale.</p>
+                <p><strong>Partner Attuali:</strong></p>
+                <ul>
+                    <li>🌍 <strong>Broker Internazionali</strong> - Collaborazioni con i principali broker europei</li>
+                    <li>🇮🇹 <strong>Travel Agency Italiane</strong> - Partnership con agenzie locali per il mercato domestico</li>
+                    <li>📈 <strong>OTA & Metasearch</strong> - Presenza sui principali canali di prenotazione online</li>
+                    <li>🤝 <strong>Accordi Diretti</strong> - Partnership esclusive con operatori di settore</li>
+                </ul>
+                <p><strong>Espansione in Corso:</strong></p>
+                <ul>
+                    <li>✨ +5 nuovi broker in fase di onboarding per il 2025</li>
+                    <li>🌐 Espansione network travel agency italiane</li>
+                    <li>🚀 Apertura nuovi mercati internazionali</li>
+                    <li>💼 Partnership strategiche con tour operator</li>
+                </ul>
+            </div>
+            
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-icon">🤝</div>
+                    <h3>Partner Attivi</h3>
+                    <div class="metric-value">17+</div>
+                    <div class="metric-label">broker internazionali</div>
+                </div>
+                <div class="metric green">
+                    <div class="metric-icon">🇮🇹</div>
+                    <h3>Travel Agency IT</h3>
+                    <div class="metric-value">50+</div>
+                    <div class="metric-label">agenzie italiane</div>
+                </div>
+                <div class="metric blue">
+                    <div class="metric-icon">🌍</div>
+                    <h3>Copertura</h3>
+                    <div class="metric-value">18</div>
+                    <div class="metric-label">paesi serviti</div>
+                </div>
+                <div class="metric orange">
+                    <div class="metric-icon">📈</div>
+                    <h3>In Espansione</h3>
+                    <div class="metric-value">+5</div>
+                    <div class="metric-label">nuovi partner 2025</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const DATA = {"summary": {"total_bookings": 100499, "total_rental_days": 784219, "avg_rental_days": 7.9, "total_revenue": 19427697.47, "years_active": [2019, 2020, 2021, 2022, 2023, 2024, 2025]}, "yearly": [{"year": 2019, "bookings": 2762, "total_days": 20457, "avg_days": 7.4, "total_revenue": 368463.78, "avg_revenue": 133.02, "rpd": 18.01}, {"year": 2020, "bookings": 2186, "total_days": 16634, "avg_days": 7.6, "total_revenue": 322492.0, "avg_revenue": 147.53, "rpd": 19.39}, {"year": 2021, "bookings": 8096, "total_days": 68729, "avg_days": 8.5, "total_revenue": 1982834.87, "avg_revenue": 244.92, "rpd": 28.85}, {"year": 2022, "bookings": 13734, "total_days": 107211, "avg_days": 7.8, "total_revenue": 4022152.85, "avg_revenue": 292.86, "rpd": 37.52}, {"year": 2023, "bookings": 17801, "total_days": 142243, "avg_days": 8.0, "total_revenue": 3885488.47, "avg_revenue": 218.27, "rpd": 27.32}, {"year": 2024, "bookings": 28673, "total_days": 219972, "avg_days": 7.7, "total_revenue": 4536546.46, "avg_revenue": 158.22, "rpd": 20.62}, {"year": 2025, "bookings": 27239, "total_days": 208973, "avg_days": 8.0, "total_revenue": 4309719.14, "avg_revenue": 129.71, "rpd": 20.62}], "countries": [{"country": "Italy", "bookings": 58366, "total_days": 458489, "avg_days": 7.9, "total_revenue": 11769307.86, "rpd": 25.67}, {"country": "Greece", "bookings": 17709, "total_days": 148320, "avg_days": 8.4, "total_revenue": 3073453.78, "rpd": 20.72}, {"country": "Albania", "bookings": 6522, "total_days": 44134, "avg_days": 6.8, "total_revenue": 1186390.45, "rpd": 26.88}, {"country": "Morocco", "bookings": 4858, "total_days": 42271, "avg_days": 8.7, "total_revenue": 737901.36, "rpd": 17.46}, {"country": "Bulgaria", "bookings": 1413, "total_days": 11426, "avg_days": 8.1, "total_revenue": 163219.77, "rpd": 14.28}, {"country": "Malta", "bookings": 963, "total_days": 6926, "avg_days": 7.2, "total_revenue": 130345.38, "rpd": 18.82}, {"country": "Switzerland", "bookings": 948, "total_days": 4155, "avg_days": 4.4, "total_revenue": 204978.19, "rpd": 49.33}, {"country": "USA", "bookings": 899, "total_days": 6150, "avg_days": 6.8, "total_revenue": 156719.63, "rpd": 25.48}, {"country": "Montenegro", "bookings": 556, "total_days": 3170, "avg_days": 5.7, "total_revenue": 120774.19, "rpd": 38.1}, {"country": "Turkey", "bookings": 374, "total_days": 5056, "avg_days": 13.5, "total_revenue": 132487.19, "rpd": 26.2}, {"country": "Portugal", "bookings": 337, "total_days": 2549, "avg_days": 7.6, "total_revenue": 51223.09, "rpd": 20.1}, {"country": "Georgia", "bookings": 203, "total_days": 1817, "avg_days": 9.0, "total_revenue": 48104.34, "rpd": 26.47}, {"country": "UAE", "bookings": 117, "total_days": 663, "avg_days": 5.7, "total_revenue": 19148.57, "rpd": 28.88}, {"country": "Caribbean", "bookings": 97, "total_days": 512, "avg_days": 5.3, "total_revenue": 17903.0, "rpd": 34.97}, {"country": "Other", "bookings": 96, "total_days": 420, "avg_days": 4.4, "total_revenue": 22400.42, "rpd": 53.33}, {"country": "Sri Lanka", "bookings": 82, "total_days": 770, "avg_days": 9.4, "total_revenue": 41341.99, "rpd": 53.69}, {"country": "Romania", "bookings": 21, "total_days": 138, "avg_days": 6.6, "total_revenue": 12323.52, "rpd": 89.3}, {"country": "Spain", "bookings": 19, "total_days": 131, "avg_days": 6.9, "total_revenue": 5555.6, "rpd": 42.41}], "rpd": [{"year": 2019, "country": "Italy", "rpd": 17.77, "bookings": 2723, "total_days": 20219, "total_revenue": 359204.39}, {"year": 2019, "country": "Other", "rpd": 38.9, "bookings": 47, "total_days": 238, "total_revenue": 9259.39}, {"year": 2020, "country": "Italy", "rpd": 20.51, "bookings": 2060, "total_days": 15295, "total_revenue": 313758.64}, {"year": 2020, "country": "Other", "rpd": 62.94, "bookings": 3, "total_days": 17, "total_revenue": 1069.9}, {"year": 2020, "country": "Malta", "rpd": 5.8, "bookings": 123, "total_days": 1322, "total_revenue": 7663.46}, {"year": 2021, "country": "Italy", "rpd": 30.14, "bookings": 6846, "total_days": 56863, "total_revenue": 1714071.82}, {"year": 2021, "country": "Other", "rpd": 62.33, "bookings": 1, "total_days": 6, "total_revenue": 374.0}, {"year": 2021, "country": "Malta", "rpd": 13.77, "bookings": 95, "total_days": 818, "total_revenue": 11263.08}, {"year": 2021, "country": "Bulgaria", "rpd": 20.44, "bookings": 182, "total_days": 1810, "total_revenue": 36988.08}, {"year": 2021, "country": "Greece", "rpd": 27.09, "bookings": 360, "total_days": 2556, "total_revenue": 69231.63}, {"year": 2021, "country": "Turkey", "rpd": 21.6, "bookings": 200, "total_days": 3189, "total_revenue": 68880.63}, {"year": 2021, "country": "Albania", "rpd": 23.52, "bookings": 412, "total_days": 3487, "total_revenue": 82025.63}, {"year": 2022, "country": "Italy", "rpd": 40.03, "bookings": 10619, "total_days": 82129, "total_revenue": 3287439.31}, {"year": 2022, "country": "Other", "rpd": 89.34, "bookings": 15, "total_days": 79, "total_revenue": 7058.0}, {"year": 2022, "country": "Malta", "rpd": 28.7, "bookings": 242, "total_days": 1702, "total_revenue": 48848.46}, {"year": 2022, "country": "Bulgaria", "rpd": 17.17, "bookings": 183, "total_days": 1252, "total_revenue": 21495.63}, {"year": 2022, "country": "Greece", "rpd": 27.63, "bookings": 1537, "total_days": 12362, "total_revenue": 341619.09}, {"year": 2022, "country": "Turkey", "rpd": 34.06, "bookings": 170, "total_days": 1855, "total_revenue": 63179.04}, {"year": 2022, "country": "Albania", "rpd": 38.44, "bookings": 632, "total_days": 4721, "total_revenue": 181469.92}, {"year": 2022, "country": "Morocco", "rpd": 22.84, "bookings": 336, "total_days": 3111, "total_revenue": 71043.4}, {"year": 2023, "country": "Italy", "rpd": 27.98, "bookings": 11571, "total_days": 92846, "total_revenue": 2597415.74}, {"year": 2023, "country": "Other", "rpd": 67.64, "bookings": 10, "total_days": 32, "total_revenue": 2164.52}, {"year": 2023, "country": "Malta", "rpd": 28.98, "bookings": 148, "total_days": 946, "total_revenue": 27411.47}, {"year": 2023, "country": "Bulgaria", "rpd": 11.5, "bookings": 224, "total_days": 1789, "total_revenue": 20577.57}, {"year": 2023, "country": "Greece", "rpd": 25.1, "bookings": 3138, "total_days": 23105, "total_revenue": 580017.38}, {"year": 2023, "country": "Turkey", "rpd": 35.63, "bookings": 4, "total_days": 12, "total_revenue": 427.52}, {"year": 2023, "country": "Albania", "rpd": 38.03, "bookings": 1130, "total_days": 8621, "total_revenue": 327896.62}, {"year": 2023, "country": "Morocco", "rpd": 20.35, "bookings": 1385, "total_days": 13409, "total_revenue": 272886.63}, {"year": 2023, "country": "Spain", "rpd": 42.41, "bookings": 19, "total_days": 131, "total_revenue": 5555.6}, {"year": 2023, "country": "Switzerland", "rpd": 83.89, "bookings": 24, "total_days": 87, "total_revenue": 7298.54}, {"year": 2023, "country": "USA", "rpd": 32.56, "bookings": 103, "total_days": 886, "total_revenue": 28852.1}, {"year": 2023, "country": "Georgia", "rpd": 35.48, "bookings": 25, "total_days": 239, "total_revenue": 8480.02}, {"year": 2023, "country": "Portugal", "rpd": 31.9, "bookings": 6, "total_days": 52, "total_revenue": 1658.99}, {"year": 2023, "country": "UAE", "rpd": 46.25, "bookings": 4, "total_days": 24, "total_revenue": 1110.0}, {"year": 2023, "country": "Caribbean", "rpd": 85.73, "bookings": 3, "total_days": 15, "total_revenue": 1286.01}, {"year": 2023, "country": "Romania", "rpd": 50.0, "bookings": 7, "total_days": 49, "total_revenue": 2449.76}, {"year": 2024, "country": "Italy", "rpd": 19.05, "bookings": 15802, "total_days": 123462, "total_revenue": 2351414.1}, {"year": 2024, "country": "Other", "rpd": 51.38, "bookings": 18, "total_days": 42, "total_revenue": 2158.01}, {"year": 2024, "country": "Malta", "rpd": 18.24, "bookings": 206, "total_days": 1246, "total_revenue": 22723.26}, {"year": 2024, "country": "Bulgaria", "rpd": 21.52, "bookings": 93, "total_days": 612, "total_revenue": 13170.07}, {"year": 2024, "country": "Greece", "rpd": 21.88, "bookings": 6008, "total_days": 51349, "total_revenue": 1123684.41}, {"year": 2024, "country": "Albania", "rpd": 26.0, "bookings": 2083, "total_days": 11450, "total_revenue": 297650.74}, {"year": 2024, "country": "Morocco", "rpd": 15.97, "bookings": 2516, "total_days": 20041, "total_revenue": 320077.69}, {"year": 2024, "country": "Montenegro", "rpd": 87.01, "bookings": 49, "total_days": 325, "total_revenue": 28278.48}, {"year": 2024, "country": "Sri Lanka", "rpd": 70.64, "bookings": 20, "total_days": 185, "total_revenue": 13068.01}, {"year": 2024, "country": "Switzerland", "rpd": 46.08, "bookings": 777, "total_days": 3512, "total_revenue": 161824.7}, {"year": 2024, "country": "USA", "rpd": 27.38, "bookings": 403, "total_days": 2619, "total_revenue": 71708.28}, {"year": 2024, "country": "Georgia", "rpd": 25.11, "bookings": 178, "total_days": 1578, "total_revenue": 39624.32}, {"year": 2024, "country": "Portugal", "rpd": 19.47, "bookings": 322, "total_days": 2441, "total_revenue": 47519.07}, {"year": 2024, "country": "UAE", "rpd": 32.74, "bookings": 90, "total_days": 524, "total_revenue": 17154.57}, {"year": 2024, "country": "Caribbean", "rpd": 33.43, "bookings": 94, "total_days": 497, "total_revenue": 16616.99}, {"year": 2024, "country": "Romania", "rpd": 110.94, "bookings": 14, "total_days": 89, "total_revenue": 9873.76}, {"year": 2025, "country": "Italy", "rpd": 16.93, "bookings": 8315, "total_days": 64291, "total_revenue": 1088703.67}, {"year": 2025, "country": "Other", "rpd": 60.15, "bookings": 1, "total_days": 5, "total_revenue": 300.77}, {"year": 2025, "country": "Malta", "rpd": 13.95, "bookings": 141, "total_days": 847, "total_revenue": 11813.87}, {"year": 2025, "country": "Bulgaria", "rpd": 11.91, "bookings": 694, "total_days": 5664, "total_revenue": 67439.0}, {"year": 2025, "country": "Greece", "rpd": 16.27, "bookings": 6332, "total_days": 56000, "total_revenue": 910956.21}, {"year": 2025, "country": "Albania", "rpd": 18.75, "bookings": 2151, "total_days": 15062, "total_revenue": 282480.16}, {"year": 2025, "country": "Morocco", "rpd": 12.94, "bookings": 589, "total_days": 5424, "total_revenue": 70198.96}, {"year": 2025, "country": "Montenegro", "rpd": 32.52, "bookings": 481, "total_days": 2702, "total_revenue": 87870.92}, {"year": 2025, "country": "Sri Lanka", "rpd": 48.4, "bookings": 58, "total_days": 555, "total_revenue": 26860.28}, {"year": 2025, "country": "Switzerland", "rpd": 64.51, "bookings": 139, "total_days": 528, "total_revenue": 34062.2}, {"year": 2025, "country": "USA", "rpd": 21.24, "bookings": 373, "total_days": 2512, "total_revenue": 53351.29}, {"year": 2025, "country": "Portugal", "rpd": 36.66, "bookings": 8, "total_days": 53, "total_revenue": 1942.78}, {"year": 2025, "country": "UAE", "rpd": 7.7, "bookings": 21, "total_days": 109, "total_revenue": 839.8}]};
+
+const txt = {
+    it: {
+        subtitle: 'Dashboard 2019-2025 - Storia Completa',
+        bookingsLabel: 'Prenotazioni',
+        daysLabel: 'Giorni',
+        revenueLabel: 'Revenue',
+        hl1: '🚀 Crescita Straordinaria: +938% in 5 Anni!',
+        hlp1: 'Dal 2019 al 2025, Acarent ha registrato una crescita esponenziale passando da 2.762 prenotazioni nel 2019 a oltre 28.673 nel 2024 (picco annuale). In totale: <strong>100.499 prenotazioni</strong> generate, più di <strong>784.219 giorni di noleggio</strong> venduti e <strong>€19.427.697 di revenue totale</strong> in 7 anni di attività.',
+        cov1: '😷 Impatto COVID-19',
+        covp1: 'Nel 2020 abbiamo registrato un calo del 21% delle prenotazioni. Ma dal 2021 ripresa esplosiva: <strong>+270% nel 2021</strong>, <strong>+70% nel 2022</strong>, <strong>+30% nel 2023</strong>, <strong>+61% nel 2024</strong>!',
+        globalTitle: '🌍 Presenza Globale: 18 Paesi Serviti!',
+        globalText: 'Acarent opera in <strong>18 mercati internazionali</strong>, con presenza consolidata in Europa, Medio Oriente, USA e Caraibi. Dalla nostra base Italia (58K+ prenotazioni) alla crescita in Grecia (17K+), Albania (6K+), e mercati emergenti come UAE, Georgia, Sri Lanka e Caribbean.',
+        brokerTitle: '🤝 Network Broker & Partner',
+        brokerIntro: '<strong>Acarent</strong> collabora con una rete consolidata di broker internazionali e travel agency per generare volume e garantire copertura globale.',
+        brokerCurrentTitle: 'Partner Attuali:',
+        broker1: '🌍 <strong>Broker Internazionali</strong> - Collaborazioni con i principali broker europei',
+        broker2: '🇮🇹 <strong>Travel Agency Italiane</strong> - Partnership con agenzie locali per il mercato domestico',
+        broker3: '📈 <strong>OTA & Metasearch</strong> - Presenza sui principali canali di prenotazione online',
+        broker4: '🤝 <strong>Accordi Diretti</strong> - Partnership esclusive con operatori di settore',
+        brokerExpTitle: 'Espansione in Corso:',
+        brokerExp1: '✨ +5 nuovi broker in fase di onboarding per il 2025',
+        brokerExp2: '🌐 Espansione network travel agency italiane',
+        brokerExp3: '🚀 Apertura nuovi mercati internazionali',
+        brokerExp4: '💼 Partnership strategiche con tour operator',
+        m1: 'Prenotazioni Totali', m1label: '2019-2025',
+        m2: 'Giorni Noleggio', m2label: 'totali venduti',
+        m3: 'Revenue Totale', m3label: '7 anni attività',
+        m4: 'Crescita 2019→2024', m4label: 'x10 in 5 anni',
+        m5: 'Paesi Attivi', m5label: 'mercati serviti',
+        mb1: 'Partner Attivi', mb1label: 'broker internazionali',
+        mb2: 'Travel Agency IT', mb2label: 'agenzie italiane',
+        mb3: 'Copertura', mb3label: 'paesi serviti',
+        mb4: 'In Espansione', mb4label: 'nuovi partner 2025',
+        tab0: 'Panoramica', tab1: 'Crescita Annuale', tab2: 'Impatto COVID', tab3: 'RPD Analisi', tab4: 'Mercati (18 Paesi)', tab5: 'Broker & Partner',
+        c1: 'Prenotazioni - Crescita 2019-2025',
+        c2: 'Revenue Anno per Anno (€)',
+        c3: 'RPD Generale per Anno (€/giorno)',
+        c4: 'Prenotazioni - Trend Completo 2019-2025',
+        c5: 'Prenotazioni per Anno - Impatto COVID e Ripresa',
+        c6: 'Confronto Pre/Post COVID (Prenotazioni)',
+        c7: 'RPD (€/giorno) per Nazione e Anno',
+        c8: '📊 Distribuzione per Paese - Tutti i 18 Mercati',
+        th1: 'Anno', th2: 'Prenotazioni', th3: 'Crescita %', th4: 'Giorni', th5: 'Revenue (€)', th6: 'RPD (€/giorno)',
+        th7: 'Anno', th8: 'Paese', th9: 'Prenotazioni', th10: 'RPD (€/giorno)', th11: 'Giorni Totali', th12: 'Revenue (€)',
+        th13: '#', th14: 'Paese', th15: 'Prenotazioni', th16: '% Totale', th17: 'Revenue (€)', th18: 'RPD (€/giorno)',
+        filter1: '🔍 Cerca anno...',
+        filter2: '🔍 Cerca anno o paese...',
+        filter3: '🔍 Cerca paese...',
+        scrollText: '👇 Scorri per vedere tutti i paesi',
+        countriesTotal: 'paesi totali',
+        allCountriesMsg: '✅ Tutti i {count} paesi sono visibili nella tabella sopra'
+    },
+    en: {
+        subtitle: 'Dashboard 2019-2025 - Complete History',
+        bookingsLabel: 'Bookings',
+        daysLabel: 'Days',
+        revenueLabel: 'Revenue',
+        hl1: '🚀 Extraordinary Growth: +938% in 5 Years!',
+        hlp1: 'From 2019 to 2025, Acarent achieved exponential growth from 2,762 bookings in 2019 to over 28,673 in 2024 (annual peak). Total: <strong>100,499 bookings</strong> generated, over <strong>784,219 rental days</strong> sold and <strong>€19,427,697 total revenue</strong> in 7 years of activity.',
+        cov1: '😷 COVID-19 Impact',
+        covp1: 'In 2020 we recorded a 21% decline in bookings. But explosive recovery from 2021: <strong>+270% in 2021</strong>, <strong>+70% in 2022</strong>, <strong>+30% in 2023</strong>, <strong>+61% in 2024</strong>!',
+        globalTitle: '🌍 Global Presence: 18 Countries Served!',
+        globalText: 'Acarent operates in <strong>18 international markets</strong>, with established presence in Europe, Middle East, USA and Caribbean. From our Italy base (58K+ bookings) to growth in Greece (17K+), Albania (6K+), and emerging markets like UAE, Georgia, Sri Lanka and Caribbean.',
+        brokerTitle: '🤝 Broker & Partner Network',
+        brokerIntro: '<strong>Acarent</strong> collaborates with an established network of international brokers and travel agencies to generate volume and ensure global coverage.',
+        brokerCurrentTitle: 'Current Partners:',
+        broker1: '🌍 <strong>International Brokers</strong> - Partnerships with major European brokers',
+        broker2: '🇮🇹 <strong>Italian Travel Agencies</strong> - Partnerships with local agencies for domestic market',
+        broker3: '📈 <strong>OTA & Metasearch</strong> - Presence on main online booking channels',
+        broker4: '🤝 <strong>Direct Agreements</strong> - Exclusive partnerships with industry operators',
+        brokerExpTitle: 'Ongoing Expansion:',
+        brokerExp1: '✨ +5 new brokers onboarding for 2025',
+        brokerExp2: '🌐 Expanding Italian travel agency network',
+        brokerExp3: '🚀 Opening new international markets',
+        brokerExp4: '💼 Strategic partnerships with tour operators',
+        m1: 'Total Bookings', m1label: '2019-2025',
+        m2: 'Rental Days', m2label: 'total sold',
+        m3: 'Total Revenue', m3label: '7 years activity',
+        m4: 'Growth 2019→2024', m4label: 'x10 in 5 years',
+        m5: 'Active Countries', m5label: 'markets served',
+        mb1: 'Active Partners', mb1label: 'international brokers',
+        mb2: 'IT Travel Agencies', mb2label: 'Italian agencies',
+        mb3: 'Coverage', mb3label: 'countries served',
+        mb4: 'Expanding', mb4label: 'new partners 2025',
+        tab0: 'Overview', tab1: 'Annual Growth', tab2: 'COVID Impact', tab3: 'RPD Analysis', tab4: 'Markets (18 Countries)', tab5: 'Brokers & Partners',
+        c1: 'Bookings - Growth 2019-2025',
+        c2: 'Revenue Year by Year (€)',
+        c3: 'Overall RPD per Year (€/day)',
+        c4: 'Bookings - Complete Trend 2019-2025',
+        c5: 'Bookings per Year - COVID Impact and Recovery',
+        c6: 'Pre/Post COVID Comparison (Bookings)',
+        c7: 'RPD (€/day) by Country and Year',
+        c8: '📊 Distribution by Country - All 18 Markets',
+        th1: 'Year', th2: 'Bookings', th3: 'Growth %', th4: 'Days', th5: 'Revenue (€)', th6: 'RPD (€/day)',
+        th7: 'Year', th8: 'Country', th9: 'Bookings', th10: 'RPD (€/day)', th11: 'Total Days', th12: 'Revenue (€)',
+        th13: '#', th14: 'Country', th15: 'Bookings', th16: '% Total', th17: 'Revenue (€)', th18: 'RPD (€/day)',
+        filter1: '🔍 Search year...',
+        filter2: '🔍 Search year or country...',
+        filter3: '🔍 Search country...',
+        scrollText: '👇 Scroll to see all countries',
+        countriesTotal: 'total countries',
+        allCountriesMsg: '✅ All {count} countries are visible in the table above'
+    }
+};
+
+
+let lang = 'it';
+let charts = {};
+let sortState = {};
+
+function updateText() {
+    const t = txt[lang];
+    if (!t) return;
+    
+    // Header subtitle e subtext
+    if (document.getElementById('subtitle')) 
+        document.getElementById('subtitle').textContent = t.subtitle;
+    
+    // Header numbers text - TRADUZIONE
+    if (document.getElementById('subtext')) {
+        const bookings = DATA.summary.total_bookings.toLocaleString('it-IT');
+        const days = DATA.summary.total_rental_days.toLocaleString('it-IT');
+        const revenue = Math.round(DATA.summary.total_revenue).toLocaleString('it-IT');
+        document.getElementById('subtext').textContent = 
+            bookings + ' ' + t.bookingsLabel + ' | ' + 
+            days + ' ' + t.daysLabel + ' | €' + 
+            revenue + ' ' + t.revenueLabel;
+    }
+    
+    // Highlight boxes
+    if (document.getElementById('hl1'))
+        document.getElementById('hl1').textContent = t.hl1;
+    if (document.getElementById('hlp1'))
+        document.getElementById('hlp1').innerHTML = t.hlp1;
+    
+    // COVID box
+    if (document.getElementById('cov1'))
+        document.getElementById('cov1').textContent = t.cov1;
+    if (document.getElementById('covp1'))
+        document.getElementById('covp1').innerHTML = t.covp1;
+    
+    // Broker box - traduci tutto il contenuto
+    const brokerBoxes = document.querySelectorAll('.broker-box');
+    if (brokerBoxes.length > 0 && t.brokerTitle) {
+        const brokerH3 = brokerBoxes[0].querySelector('h3');
+        if (brokerH3) brokerH3.textContent = t.brokerTitle;
+        
+        const brokerPs = brokerBoxes[0].querySelectorAll('p');
+        if (brokerPs[0]) brokerPs[0].innerHTML = t.brokerIntro;
+        if (brokerPs[1]) brokerPs[1].innerHTML = '<strong>' + t.brokerCurrentTitle + '</strong>';
+        if (brokerPs[2]) brokerPs[2].innerHTML = '<strong>' + t.brokerExpTitle + '</strong>';
+        
+        const brokerUls = brokerBoxes[0].querySelectorAll('ul');
+        if (brokerUls[0]) {
+            const li = brokerUls[0].querySelectorAll('li');
+            if (li[0] && t.broker1) li[0].innerHTML = t.broker1;
+            if (li[1] && t.broker2) li[1].innerHTML = t.broker2;
+            if (li[2] && t.broker3) li[2].innerHTML = t.broker3;
+            if (li[3] && t.broker4) li[3].innerHTML = t.broker4;
+        }
+        if (brokerUls[1]) {
+            const li = brokerUls[1].querySelectorAll('li');
+            if (li[0] && t.brokerExp1) li[0].innerHTML = t.brokerExp1;
+            if (li[1] && t.brokerExp2) li[1].innerHTML = t.brokerExp2;
+            if (li[2] && t.brokerExp3) li[2].innerHTML = t.brokerExp3;
+            if (li[3] && t.brokerExp4) li[3].innerHTML = t.brokerExp4;
+        }
+    }
+    
+    // Global presence box (Markets tab)
+    const highlightBoxes = document.querySelectorAll('.highlight-box');
+    if (highlightBoxes.length > 1 && t.globalTitle) {
+        const globalH3 = highlightBoxes[1].querySelector('h3');
+        const globalP = highlightBoxes[1].querySelector('p');
+        if (globalH3) globalH3.textContent = t.globalTitle;
+        if (globalP) globalP.innerHTML = t.globalText;
+    }
+    
+    // Tabs
+    document.querySelectorAll('.tab span').forEach((span, i) => {
+        if (t['tab' + i]) span.textContent = t['tab' + i];
+    });
+    
+    // Chart titles
+    document.querySelectorAll('.chart-title').forEach((title, i) => {
+        if (t['c' + (i + 1)]) {
+            // Mantieni emoji e sostituisci testo
+            const text = t['c' + (i + 1)];
+            title.textContent = text;
+        }
+    });
+    
+    // Metrics labels (Overview)
+    const metricTitles = document.querySelectorAll('.metric h3');
+    const metricLabels = document.querySelectorAll('.metric-label');
+    
+    // Prima card metrics (Overview - 5 cards)
+    if (metricTitles[0] && t.m1) metricTitles[0].textContent = t.m1;
+    if (metricTitles[1] && t.m2) metricTitles[1].textContent = t.m2;
+    if (metricTitles[2] && t.m3) metricTitles[2].textContent = t.m3;
+    if (metricTitles[3] && t.m4) metricTitles[3].textContent = t.m4;
+    if (metricTitles[4] && t.m5) metricTitles[4].textContent = t.m5;
+    if (metricLabels[0] && t.m1label) metricLabels[0].textContent = t.m1label;
+    if (metricLabels[1] && t.m2label) metricLabels[1].textContent = t.m2label;
+    if (metricLabels[2] && t.m3label) metricLabels[2].textContent = t.m3label;
+    if (metricLabels[3] && t.m4label) metricLabels[3].textContent = t.m4label;
+    if (metricLabels[4] && t.m5label) metricLabels[4].textContent = t.m5label;
+    
+    // Broker metrics (Broker tab - 4 cards)
+    if (metricTitles[5] && t.mb1) metricTitles[5].textContent = t.mb1;
+    if (metricTitles[6] && t.mb2) metricTitles[6].textContent = t.mb2;
+    if (metricTitles[7] && t.mb3) metricTitles[7].textContent = t.mb3;
+    if (metricTitles[8] && t.mb4) metricTitles[8].textContent = t.mb4;
+    if (metricLabels[5] && t.mb1label) metricLabels[5].textContent = t.mb1label;
+    if (metricLabels[6] && t.mb2label) metricLabels[6].textContent = t.mb2label;
+    if (metricLabels[7] && t.mb3label) metricLabels[7].textContent = t.mb3label;
+    if (metricLabels[8] && t.mb4label) metricLabels[8].textContent = t.mb4label;
+    
+    // Table headers
+    const tables = document.querySelectorAll('table');
+    if (tables[0] && t.th1) {
+        const ths = tables[0].querySelectorAll('th');
+        const headers = [t.th1, t.th2, t.th3, t.th4, t.th5, t.th6];
+        headers.forEach((txt, i) => {
+            if (ths[i]) {
+                const sortIcon = ths[i].querySelector('.sort-icon');
+                ths[i].childNodes[0].textContent = txt + ' ';
+            }
+        });
+    }
+    if (tables[1] && t.th7) {
+        const ths = tables[1].querySelectorAll('th');
+        const headers = [t.th7, t.th8, t.th9, t.th10, t.th11, t.th12];
+        headers.forEach((txt, i) => {
+            if (ths[i]) ths[i].childNodes[0].textContent = txt + ' ';
+        });
+    }
+    if (tables[2] && t.th13) {
+        const ths = tables[2].querySelectorAll('th');
+        const headers = [t.th13, t.th14, t.th15, t.th16, t.th17, t.th18];
+        headers.forEach((txt, i) => {
+            if (ths[i]) ths[i].childNodes[0].textContent = txt + ' ';
+        });
+    }
+    
+    // Filter placeholders
+    const filters = document.querySelectorAll('.filter-input');
+    if (filters[0] && t.filter1) filters[0].placeholder = t.filter1;
+    if (filters[1] && t.filter2) filters[1].placeholder = t.filter2;
+    if (filters[2] && t.filter3) filters[2].placeholder = t.filter3;
+    
+    // Scroll text and counter in Markets tab
+    const scrollText = document.querySelector('.chart-box p[style*="color: #667eea"]');
+    if (scrollText && t.scrollText) scrollText.textContent = t.scrollText;
+    
+    const countryTotal = document.querySelector('.filter-box span[style*="font-weight: 800"]');
+    if (countryTotal && t.countriesTotal) {
+        const count = DATA.countries.length;
+        countryTotal.innerHTML = '📊 <span id="countryCount">' + count + '</span> ' + t.countriesTotal;
+    }
+    
+    const allCountriesMsg = document.querySelector('div[style*="margin-top: 20px"] p');
+    if (allCountriesMsg && t.allCountriesMsg) {
+        const count = DATA.countries.length;
+        allCountriesMsg.innerHTML = t.allCountriesMsg.replace('{count}', '<span id="totalCountries">' + count + '</span>');
+    }
+}
+
+function setLang(newLang) {
+    lang = newLang;
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    updateText();
+    renderCharts();
+    renderTables();
+}
+
+function showTab(index) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab')[index].classList.add('active');
+    document.getElementById('content' + index).classList.add('active');
+}
+
+function fmt(n) {
+    return new Intl.NumberFormat(lang === 'it' ? 'it-IT' : 'en-US').format(Math.round(n));
+}
+
+function filterTable(tableId, filterId) {
+    const filter = document.getElementById(filterId).value.toUpperCase();
+    const table = document.getElementById(tableId);
+    const tr = table.getElementsByTagName('tr');
+    
+    for (let i = 1; i < tr.length; i++) {
+        const row = tr[i];
+        const text = row.textContent || row.innerText;
+        row.style.display = text.toUpperCase().indexOf(filter) > -1 ? '' : 'none';
+    }
+}
+
+function sortTable(tableId, colIndex) {
+    const table = document.getElementById(tableId);
+    const tbody = table.getElementsByTagName('tbody')[0];
+    const rows = Array.from(tbody.getElementsByTagName('tr'));
+    
+    const key = tableId + '-' + colIndex;
+    const isAsc = sortState[key] !== 'asc';
+    sortState[key] = isAsc ? 'asc' : 'desc';
+    
+    table.querySelectorAll('th').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+    });
+    const th = table.querySelectorAll('th')[colIndex];
+    th.classList.add(isAsc ? 'sort-asc' : 'sort-desc');
+    
+    rows.sort((a, b) => {
+        const aVal = a.cells[colIndex].textContent.trim();
+        const bVal = b.cells[colIndex].textContent.trim();
+        
+        const aNum = parseFloat(aVal.replace(/[^0-9.-]/g, ''));
+        const bNum = parseFloat(bVal.replace(/[^0-9.-]/g, ''));
+        
+        if (!isNaN(aNum) && !isNaN(bNum)) {
+            return isAsc ? aNum - bNum : bNum - aNum;
+        }
+        return isAsc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+    });
+    
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+function renderCharts() {
+    Object.values(charts).forEach(c => { try { c.destroy(); } catch(e) {} });
+    charts = {};
+    
+    const years = DATA.yearly.map(y => y.year);
+    const bookings = DATA.yearly.map(y => y.bookings);
+    const revenue = DATA.yearly.map(y => y.total_revenue);
+    const rpd = DATA.yearly.map(y => y.rpd);
+    
+    charts.c1 = new Chart(document.getElementById('chart1'), {
+        type: 'bar',
+        data: {
+            labels: years,
+            datasets: [{
+                label: 'Prenotazioni',
+                data: bookings,
+                backgroundColor: years.map(y => y === 2020 ? 'rgba(220,38,38,0.7)' : 'rgba(102,126,234,0.7)'),
+                borderColor: years.map(y => y === 2020 ? '#dc2626' : '#667eea'),
+                borderWidth: 3
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } }
+    });
+    
+    charts.c2 = new Chart(document.getElementById('chart2'), {
+        type: 'line',
+        data: {
+            labels: years,
+            datasets: [{
+                label: 'Revenue (€)',
+                data: revenue,
+                backgroundColor: 'rgba(17,153,142,0.2)',
+                borderColor: '#11998e',
+                borderWidth: 4,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } }
+    });
+    
+    charts.c3 = new Chart(document.getElementById('chart3'), {
+        type: 'line',
+        data: {
+            labels: years,
+            datasets: [{
+                label: 'RPD (€/giorno)',
+                data: rpd,
+                backgroundColor: 'rgba(79,172,254,0.2)',
+                borderColor: '#4facfe',
+                borderWidth: 4,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 8
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } }
+    });
+    
+    charts.c4 = new Chart(document.getElementById('chart4'), {
+        type: 'line',
+        data: {
+            labels: years,
+            datasets: [{
+                label: 'Prenotazioni',
+                data: bookings,
+                backgroundColor: 'rgba(102,126,234,0.2)',
+                borderColor: '#667eea',
+                borderWidth: 4,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 8
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } }
+    });
+    
+    charts.c5 = new Chart(document.getElementById('chart5'), {
+        type: 'line',
+        data: {
+            labels: years,
+            datasets: [{
+                label: 'Prenotazioni per Anno',
+                data: bookings,
+                backgroundColor: 'rgba(17,153,142,0.2)',
+                borderColor: '#11998e',
+                borderWidth: 4,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 8
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } }
+    });
+    
+    charts.c6 = new Chart(document.getElementById('chart6'), {
+        type: 'bar',
+        data: {
+            labels: ['Pre-COVID (2019)', 'COVID (2020)', 'Post-COVID (2024)'],
+            datasets: [{
+                label: 'Prenotazioni',
+                data: [bookings[0], bookings[1], bookings[5]],
+                backgroundColor: ['rgba(102,126,234,0.7)', 'rgba(220,38,38,0.7)', 'rgba(17,153,142,0.7)'],
+                borderColor: ['#667eea', '#dc2626', '#11998e'],
+                borderWidth: 3
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } }
+    });
+    
+    const rpdByCountry = {};
+    DATA.rpd.forEach(r => {
+        if(!rpdByCountry[r.country]) rpdByCountry[r.country] = {years: [], rpds: []};
+        rpdByCountry[r.country].years.push(r.year);
+        rpdByCountry[r.country].rpds.push(r.rpd);
+    });
+    const colors = ['#667eea', '#11998e', '#4facfe', '#f093fb', '#fbbf24', '#f59e0b'];
+    const datasets = Object.keys(rpdByCountry).slice(0,6).map((country, i) => ({
+        label: country,
+        data: years.map(year => {
+            const idx = rpdByCountry[country].years.indexOf(year);
+            return idx >= 0 ? rpdByCountry[country].rpds[idx] : null;
+        }),
+        borderColor: colors[i],
+        backgroundColor: colors[i],
+        borderWidth: 3,
+        tension: 0.4
+    }));
+    charts.c7 = new Chart(document.getElementById('chart7'), {
+        type: 'line',
+        data: { labels: years, datasets: datasets },
+        options: { responsive: true, plugins: { legend: { display: true, position: 'top' } }, scales: { y: { beginAtZero: true } } }
+    });
+    
+    charts.c8 = new Chart(document.getElementById('chart8'), {
+        type: 'bar',
+        data: {
+            labels: DATA.countries.map(c => c.country),
+            datasets: [{
+                label: 'Prenotazioni',
+                data: DATA.countries.map(c => c.bookings),
+                backgroundColor: 'rgba(102,126,234,0.7)',
+                borderColor: '#667eea',
+                borderWidth: 2
+            }]
+        },
+        options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: true } }, scales: { x: { beginAtZero: true } } }
+    });
+}
+
+function renderTables() {
+    const tbody1 = document.getElementById('tbody1');
+    tbody1.innerHTML = '';
+    DATA.yearly.forEach((y, i) => {
+        const growth = i > 0 ? ((y.bookings / DATA.yearly[i-1].bookings - 1) * 100).toFixed(1) + '%' : '-';
+        const badgeClass = i > 0 && y.bookings > DATA.yearly[i-1].bookings ? 'success' : 'danger';
+        tbody1.innerHTML += '<tr><td><strong>' + y.year + '</strong></td><td>' + fmt(y.bookings) + '</td><td><span class="badge ' + badgeClass + '">' + growth + '</span></td><td>' + fmt(y.total_days) + '</td><td>€' + fmt(y.total_revenue) + '</td><td><strong>€' + y.rpd.toFixed(2) + '</strong></td></tr>';
+    });
+    
+    const tbody2 = document.getElementById('tbody2');
+    tbody2.innerHTML = '';
+    DATA.rpd.forEach(r => {
+        tbody2.innerHTML += '<tr><td><strong>' + r.year + '</strong></td><td>' + r.country + '</td><td>' + r.bookings + '</td><td><strong>€' + r.rpd.toFixed(2) + '</strong></td><td>' + fmt(r.total_days) + '</td><td>€' + fmt(r.total_revenue) + '</td></tr>';
+    });
+    
+    const tbody3 = document.getElementById('tbody3');
+    tbody3.innerHTML = '';
+    const total = DATA.summary.total_bookings;
+    DATA.countries.forEach((c, index) => {
+        const pct = ((c.bookings / total) * 100).toFixed(1) + '%';
+        tbody3.innerHTML += '<tr><td><strong>' + (index + 1) + '</strong></td><td><strong>' + c.country + '</strong></td><td>' + fmt(c.bookings) + '</td><td><span class="badge success">' + pct + '</span></td><td>€' + fmt(c.total_revenue) + '</td><td><strong>€' + c.rpd.toFixed(2) + '</strong></td></tr>';
+    });
+    
+    // Aggiorna contatore paesi
+    const countryCountEl = document.getElementById('countryCount');
+    const totalCountriesEl = document.getElementById('totalCountries');
+    if (countryCountEl) countryCountEl.textContent = DATA.countries.length;
+    if (totalCountriesEl) totalCountriesEl.textContent = DATA.countries.length;
+}
+
+renderCharts();
+renderTables();
+updateText();
+</script>
+</body>
+</html>
