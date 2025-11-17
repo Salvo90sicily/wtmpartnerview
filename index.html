@@ -3,16 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Dashboard interattiva Acarent 2019-2025: 93.588 prenotazioni, 18 paesi, analisi crescita e revenue">
+<meta name="theme-color" content="#667eea">
 <title>Acarent Growth Dashboard 2019-2025 | 93.588 Prenotazioni</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
     background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
     min-height: 100vh;
     padding: 20px;
     overflow-x: hidden;
+}
+
+/* Reduced Motion per accessibilità */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
 @media (max-width: 768px) {
     body {
@@ -54,11 +73,23 @@ body {
     border-radius: 25px;
     cursor: pointer;
     font-weight: 700;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    min-height: 44px; /* Touch target */
+}
+.lang-btn:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-2px);
+}
+.lang-btn:focus {
+    outline: 3px solid rgba(255,255,255,0.8);
+    outline-offset: 2px;
 }
 .lang-btn.active {
     background: white;
     color: #667eea;
+    box-shadow: 0 4px 15px rgba(255,255,255,0.3);
 }
 .header h1 {
     font-size: 5em;
@@ -79,6 +110,11 @@ body {
     background: #f8f9fa;
     border-bottom: 4px solid #dee2e6;
     overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    -webkit-overflow-scrolling: touch;
 }
 .tab {
     padding: 25px 35px;
@@ -88,18 +124,43 @@ body {
     border: none;
     border-bottom: 5px solid transparent;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
     white-space: nowrap;
     background: transparent;
+    position: relative;
+    min-height: 48px; /* Touch target accessibility */
 }
 .tab:hover {
     background: #e9ecef;
     color: #667eea;
+    transform: translateY(-2px);
+}
+.tab:focus {
+    outline: 3px solid #667eea;
+    outline-offset: 2px;
+}
+.tab:active {
+    transform: translateY(0);
 }
 .tab.active {
     color: #667eea;
     background: white;
     border-bottom-color: #667eea;
+}
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
 }
 .content {
     padding: 50px;
@@ -122,10 +183,32 @@ body {
     padding: 35px;
     border-radius: 25px;
     box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
-    transition: all 0.4s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    position: relative;
+    overflow: hidden;
+}
+.metric::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    transform: scale(0);
+    transition: transform 0.6s ease;
 }
 .metric:hover {
-    transform: translateY(-10px);
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(102, 126, 234, 0.5);
+}
+.metric:hover::before {
+    transform: scale(1);
+}
+.metric:focus-within {
+    outline: 3px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 3px;
 }
 .metric.green {
     background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
@@ -471,7 +554,7 @@ tbody tr:nth-child(even) {
     }
 }
 @media (max-width: 768px) {
-    .header-logo { 
+    .header-logo {
         height: 50px;
         position: relative;
         top: 0;
@@ -479,6 +562,90 @@ tbody tr:nth-child(even) {
         margin: 0 auto 15px;
         display: block;
     }
+}
+
+/* Scroll to Top Button */
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    opacity: 0;
+}
+.scroll-to-top.visible {
+    display: flex;
+    opacity: 1;
+    animation: fadeInUp 0.3s ease;
+}
+.scroll-to-top:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+.scroll-to-top:focus {
+    outline: 3px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 3px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Skeleton Loading per grafici */
+.chart-skeleton {
+    width: 100%;
+    height: 300px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 15px;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Miglioramenti Input Filter */
+.filter-input {
+    transition: all 0.3s ease;
+}
+.filter-input:hover {
+    border-color: #a5b4fc;
+}
+
+/* Miglioramenti Table */
+tbody tr {
+    transition: all 0.2s ease;
+}
+tbody tr:hover {
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Performance optimization */
+.metric, .tab, .lang-btn {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 </style>
 </head>
@@ -722,6 +889,11 @@ tbody tr:nth-child(even) {
         </div>
     </div>
 </div>
+
+<!-- Scroll to Top Button -->
+<button class="scroll-to-top" id="scrollToTop" aria-label="Torna su" title="Torna su">
+    ↑
+</button>
 
 <script>
 const DATA = {"summary": {"total_bookings": 100499, "total_rental_days": 784219, "avg_rental_days": 7.9, "total_revenue": 19427697.47, "years_active": [2019, 2020, 2021, 2022, 2023, 2024, 2025]}, "yearly": [{"year": 2019, "bookings": 2762, "total_days": 20457, "avg_days": 7.4, "total_revenue": 368463.78, "avg_revenue": 133.02, "rpd": 18.01}, {"year": 2020, "bookings": 2186, "total_days": 16634, "avg_days": 7.6, "total_revenue": 322492.0, "avg_revenue": 147.53, "rpd": 19.39}, {"year": 2021, "bookings": 8096, "total_days": 68729, "avg_days": 8.5, "total_revenue": 1982834.87, "avg_revenue": 244.92, "rpd": 28.85}, {"year": 2022, "bookings": 13734, "total_days": 107211, "avg_days": 7.8, "total_revenue": 4022152.85, "avg_revenue": 292.86, "rpd": 37.52}, {"year": 2023, "bookings": 17801, "total_days": 142243, "avg_days": 8.0, "total_revenue": 3885488.47, "avg_revenue": 218.27, "rpd": 27.32}, {"year": 2024, "bookings": 28673, "total_days": 219972, "avg_days": 7.7, "total_revenue": 4536546.46, "avg_revenue": 158.22, "rpd": 20.62}, {"year": 2025, "bookings": 27239, "total_days": 208973, "avg_days": 8.0, "total_revenue": 4309719.14, "avg_revenue": 129.71, "rpd": 20.62}], "countries": [{"country": "Italy", "bookings": 58366, "total_days": 458489, "avg_days": 7.9, "total_revenue": 11769307.86, "rpd": 25.67}, {"country": "Greece", "bookings": 17709, "total_days": 148320, "avg_days": 8.4, "total_revenue": 3073453.78, "rpd": 20.72}, {"country": "Albania", "bookings": 6522, "total_days": 44134, "avg_days": 6.8, "total_revenue": 1186390.45, "rpd": 26.88}, {"country": "Morocco", "bookings": 4858, "total_days": 42271, "avg_days": 8.7, "total_revenue": 737901.36, "rpd": 17.46}, {"country": "Bulgaria", "bookings": 1413, "total_days": 11426, "avg_days": 8.1, "total_revenue": 163219.77, "rpd": 14.28}, {"country": "Malta", "bookings": 963, "total_days": 6926, "avg_days": 7.2, "total_revenue": 130345.38, "rpd": 18.82}, {"country": "Switzerland", "bookings": 948, "total_days": 4155, "avg_days": 4.4, "total_revenue": 204978.19, "rpd": 49.33}, {"country": "USA", "bookings": 899, "total_days": 6150, "avg_days": 6.8, "total_revenue": 156719.63, "rpd": 25.48}, {"country": "Montenegro", "bookings": 556, "total_days": 3170, "avg_days": 5.7, "total_revenue": 120774.19, "rpd": 38.1}, {"country": "Turkey", "bookings": 374, "total_days": 5056, "avg_days": 13.5, "total_revenue": 132487.19, "rpd": 26.2}, {"country": "Portugal", "bookings": 337, "total_days": 2549, "avg_days": 7.6, "total_revenue": 51223.09, "rpd": 20.1}, {"country": "Georgia", "bookings": 203, "total_days": 1817, "avg_days": 9.0, "total_revenue": 48104.34, "rpd": 26.47}, {"country": "UAE", "bookings": 117, "total_days": 663, "avg_days": 5.7, "total_revenue": 19148.57, "rpd": 28.88}, {"country": "Caribbean", "bookings": 97, "total_days": 512, "avg_days": 5.3, "total_revenue": 17903.0, "rpd": 34.97}, {"country": "Other", "bookings": 96, "total_days": 420, "avg_days": 4.4, "total_revenue": 22400.42, "rpd": 53.33}, {"country": "Sri Lanka", "bookings": 82, "total_days": 770, "avg_days": 9.4, "total_revenue": 41341.99, "rpd": 53.69}, {"country": "Romania", "bookings": 21, "total_days": 138, "avg_days": 6.6, "total_revenue": 12323.52, "rpd": 89.3}, {"country": "Spain", "bookings": 19, "total_days": 131, "avg_days": 6.9, "total_revenue": 5555.6, "rpd": 42.41}], "rpd": [{"year": 2019, "country": "Italy", "rpd": 17.77, "bookings": 2723, "total_days": 20219, "total_revenue": 359204.39}, {"year": 2019, "country": "Other", "rpd": 38.9, "bookings": 47, "total_days": 238, "total_revenue": 9259.39}, {"year": 2020, "country": "Italy", "rpd": 20.51, "bookings": 2060, "total_days": 15295, "total_revenue": 313758.64}, {"year": 2020, "country": "Other", "rpd": 62.94, "bookings": 3, "total_days": 17, "total_revenue": 1069.9}, {"year": 2020, "country": "Malta", "rpd": 5.8, "bookings": 123, "total_days": 1322, "total_revenue": 7663.46}, {"year": 2021, "country": "Italy", "rpd": 30.14, "bookings": 6846, "total_days": 56863, "total_revenue": 1714071.82}, {"year": 2021, "country": "Other", "rpd": 62.33, "bookings": 1, "total_days": 6, "total_revenue": 374.0}, {"year": 2021, "country": "Malta", "rpd": 13.77, "bookings": 95, "total_days": 818, "total_revenue": 11263.08}, {"year": 2021, "country": "Bulgaria", "rpd": 20.44, "bookings": 182, "total_days": 1810, "total_revenue": 36988.08}, {"year": 2021, "country": "Greece", "rpd": 27.09, "bookings": 360, "total_days": 2556, "total_revenue": 69231.63}, {"year": 2021, "country": "Turkey", "rpd": 21.6, "bookings": 200, "total_days": 3189, "total_revenue": 68880.63}, {"year": 2021, "country": "Albania", "rpd": 23.52, "bookings": 412, "total_days": 3487, "total_revenue": 82025.63}, {"year": 2022, "country": "Italy", "rpd": 40.03, "bookings": 10619, "total_days": 82129, "total_revenue": 3287439.31}, {"year": 2022, "country": "Other", "rpd": 89.34, "bookings": 15, "total_days": 79, "total_revenue": 7058.0}, {"year": 2022, "country": "Malta", "rpd": 28.7, "bookings": 242, "total_days": 1702, "total_revenue": 48848.46}, {"year": 2022, "country": "Bulgaria", "rpd": 17.17, "bookings": 183, "total_days": 1252, "total_revenue": 21495.63}, {"year": 2022, "country": "Greece", "rpd": 27.63, "bookings": 1537, "total_days": 12362, "total_revenue": 341619.09}, {"year": 2022, "country": "Turkey", "rpd": 34.06, "bookings": 170, "total_days": 1855, "total_revenue": 63179.04}, {"year": 2022, "country": "Albania", "rpd": 38.44, "bookings": 632, "total_days": 4721, "total_revenue": 181469.92}, {"year": 2022, "country": "Morocco", "rpd": 22.84, "bookings": 336, "total_days": 3111, "total_revenue": 71043.4}, {"year": 2023, "country": "Italy", "rpd": 27.98, "bookings": 11571, "total_days": 92846, "total_revenue": 2597415.74}, {"year": 2023, "country": "Other", "rpd": 67.64, "bookings": 10, "total_days": 32, "total_revenue": 2164.52}, {"year": 2023, "country": "Malta", "rpd": 28.98, "bookings": 148, "total_days": 946, "total_revenue": 27411.47}, {"year": 2023, "country": "Bulgaria", "rpd": 11.5, "bookings": 224, "total_days": 1789, "total_revenue": 20577.57}, {"year": 2023, "country": "Greece", "rpd": 25.1, "bookings": 3138, "total_days": 23105, "total_revenue": 580017.38}, {"year": 2023, "country": "Turkey", "rpd": 35.63, "bookings": 4, "total_days": 12, "total_revenue": 427.52}, {"year": 2023, "country": "Albania", "rpd": 38.03, "bookings": 1130, "total_days": 8621, "total_revenue": 327896.62}, {"year": 2023, "country": "Morocco", "rpd": 20.35, "bookings": 1385, "total_days": 13409, "total_revenue": 272886.63}, {"year": 2023, "country": "Spain", "rpd": 42.41, "bookings": 19, "total_days": 131, "total_revenue": 5555.6}, {"year": 2023, "country": "Switzerland", "rpd": 83.89, "bookings": 24, "total_days": 87, "total_revenue": 7298.54}, {"year": 2023, "country": "USA", "rpd": 32.56, "bookings": 103, "total_days": 886, "total_revenue": 28852.1}, {"year": 2023, "country": "Georgia", "rpd": 35.48, "bookings": 25, "total_days": 239, "total_revenue": 8480.02}, {"year": 2023, "country": "Portugal", "rpd": 31.9, "bookings": 6, "total_days": 52, "total_revenue": 1658.99}, {"year": 2023, "country": "UAE", "rpd": 46.25, "bookings": 4, "total_days": 24, "total_revenue": 1110.0}, {"year": 2023, "country": "Caribbean", "rpd": 85.73, "bookings": 3, "total_days": 15, "total_revenue": 1286.01}, {"year": 2023, "country": "Romania", "rpd": 50.0, "bookings": 7, "total_days": 49, "total_revenue": 2449.76}, {"year": 2024, "country": "Italy", "rpd": 19.05, "bookings": 15802, "total_days": 123462, "total_revenue": 2351414.1}, {"year": 2024, "country": "Other", "rpd": 51.38, "bookings": 18, "total_days": 42, "total_revenue": 2158.01}, {"year": 2024, "country": "Malta", "rpd": 18.24, "bookings": 206, "total_days": 1246, "total_revenue": 22723.26}, {"year": 2024, "country": "Bulgaria", "rpd": 21.52, "bookings": 93, "total_days": 612, "total_revenue": 13170.07}, {"year": 2024, "country": "Greece", "rpd": 21.88, "bookings": 6008, "total_days": 51349, "total_revenue": 1123684.41}, {"year": 2024, "country": "Albania", "rpd": 26.0, "bookings": 2083, "total_days": 11450, "total_revenue": 297650.74}, {"year": 2024, "country": "Morocco", "rpd": 15.97, "bookings": 2516, "total_days": 20041, "total_revenue": 320077.69}, {"year": 2024, "country": "Montenegro", "rpd": 87.01, "bookings": 49, "total_days": 325, "total_revenue": 28278.48}, {"year": 2024, "country": "Sri Lanka", "rpd": 70.64, "bookings": 20, "total_days": 185, "total_revenue": 13068.01}, {"year": 2024, "country": "Switzerland", "rpd": 46.08, "bookings": 777, "total_days": 3512, "total_revenue": 161824.7}, {"year": 2024, "country": "USA", "rpd": 27.38, "bookings": 403, "total_days": 2619, "total_revenue": 71708.28}, {"year": 2024, "country": "Georgia", "rpd": 25.11, "bookings": 178, "total_days": 1578, "total_revenue": 39624.32}, {"year": 2024, "country": "Portugal", "rpd": 19.47, "bookings": 322, "total_days": 2441, "total_revenue": 47519.07}, {"year": 2024, "country": "UAE", "rpd": 32.74, "bookings": 90, "total_days": 524, "total_revenue": 17154.57}, {"year": 2024, "country": "Caribbean", "rpd": 33.43, "bookings": 94, "total_days": 497, "total_revenue": 16616.99}, {"year": 2024, "country": "Romania", "rpd": 110.94, "bookings": 14, "total_days": 89, "total_revenue": 9873.76}, {"year": 2025, "country": "Italy", "rpd": 16.93, "bookings": 8315, "total_days": 64291, "total_revenue": 1088703.67}, {"year": 2025, "country": "Other", "rpd": 60.15, "bookings": 1, "total_days": 5, "total_revenue": 300.77}, {"year": 2025, "country": "Malta", "rpd": 13.95, "bookings": 141, "total_days": 847, "total_revenue": 11813.87}, {"year": 2025, "country": "Bulgaria", "rpd": 11.91, "bookings": 694, "total_days": 5664, "total_revenue": 67439.0}, {"year": 2025, "country": "Greece", "rpd": 16.27, "bookings": 6332, "total_days": 56000, "total_revenue": 910956.21}, {"year": 2025, "country": "Albania", "rpd": 18.75, "bookings": 2151, "total_days": 15062, "total_revenue": 282480.16}, {"year": 2025, "country": "Morocco", "rpd": 12.94, "bookings": 589, "total_days": 5424, "total_revenue": 70198.96}, {"year": 2025, "country": "Montenegro", "rpd": 32.52, "bookings": 481, "total_days": 2702, "total_revenue": 87870.92}, {"year": 2025, "country": "Sri Lanka", "rpd": 48.4, "bookings": 58, "total_days": 555, "total_revenue": 26860.28}, {"year": 2025, "country": "Switzerland", "rpd": 64.51, "bookings": 139, "total_days": 528, "total_revenue": 34062.2}, {"year": 2025, "country": "USA", "rpd": 21.24, "bookings": 373, "total_days": 2512, "total_revenue": 53351.29}, {"year": 2025, "country": "Portugal", "rpd": 36.66, "bookings": 8, "total_days": 53, "total_revenue": 1942.78}, {"year": 2025, "country": "UAE", "rpd": 7.7, "bookings": 21, "total_days": 109, "total_revenue": 839.8}]};
@@ -1240,6 +1412,78 @@ function renderTables() {
 renderCharts();
 renderTables();
 updateText();
+
+// Scroll to Top Button functionality
+const scrollToTopBtn = document.getElementById('scrollToTop');
+
+window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+        scrollToTopBtn.classList.add('visible');
+    } else {
+        scrollToTopBtn.classList.remove('visible');
+    }
+});
+
+scrollToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+
+// Miglioramento performance animazioni - pause when tab not visible
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        document.querySelectorAll('.metric, .tab').forEach(el => {
+            el.style.willChange = 'auto';
+        });
+    } else {
+        document.querySelectorAll('.metric, .tab').forEach(el => {
+            el.style.willChange = 'transform';
+        });
+    }
+});
+
+// Fade-in animazione al caricamento delle sezioni
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+};
+
+const fadeInObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+// Applica fade-in ai box grafici
+document.querySelectorAll('.chart-box, .highlight-box, .covid-box, .broker-box').forEach(box => {
+    box.style.opacity = '0';
+    box.style.transform = 'translateY(20px)';
+    box.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    fadeInObserver.observe(box);
+});
+
+// Keyboard navigation migliorata per tabs
+document.querySelectorAll('.tab').forEach((tab, index, tabs) => {
+    tab.addEventListener('keydown', (e) => {
+        let newIndex = index;
+        if (e.key === 'ArrowRight') {
+            newIndex = (index + 1) % tabs.length;
+            e.preventDefault();
+        } else if (e.key === 'ArrowLeft') {
+            newIndex = (index - 1 + tabs.length) % tabs.length;
+            e.preventDefault();
+        }
+        if (newIndex !== index) {
+            tabs[newIndex].click();
+            tabs[newIndex].focus();
+        }
+    });
+});
 </script>
 </body>
 </html>
